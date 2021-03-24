@@ -1,0 +1,12 @@
+{
+  "name": "top-nfl-colleges",
+  "displayName": "top-nfl-colleges",
+  "expo": {
+    "name": "top-nfl-colleges",
+    "slug": "top-nfl-colleges",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  }
+}
