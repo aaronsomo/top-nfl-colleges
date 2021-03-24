@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, Text, Button, View, Image, ImageBackground } from 'react-native';
 import axios from 'axios';
 import { FlatList, ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
+import { find, sortBy } from 'lodash';
 
 const SelectTeams = ({ navigation }) => {
     const [teams, setTeams] = useState([]);
@@ -36,6 +37,22 @@ const SelectTeams = ({ navigation }) => {
         setAllPlayers(congregatePlayers);
     };
 
+    const countColleges = () => {
+        const colleges = [];
+        if (allPlayers.length > 0) {
+            allPlayers.forEach(player => {
+                const college = find(colleges, { name: player.college.name });
+                if (!college) {
+                    player.college.count = 1;
+                    colleges.push(player.college);
+                } else {
+                    college.count++;
+                }
+            });
+        }
+        const sortedColleges = sortBy(colleges, college => college.count).reverse();
+    };
+
     useEffect(() => {
         fetchTeams();
     }, []);
@@ -66,6 +83,10 @@ const SelectTeams = ({ navigation }) => {
             <Button
                 title="Get Bears Roster"
                 onPress={() => fetchTeamRoster()}
+            />
+            <Button
+                title="Get Bears Colleges"
+                onPress={() => countColleges()}
             />
             <Button
                 title="Results"
