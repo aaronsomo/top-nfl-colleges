@@ -9,47 +9,51 @@ const SelectTeams = ({ navigation }) => {
     const [allPlayers, setAllPlayers] = useState([]);
 
     const fetchTeams = () => {
+        // fetch a list of teams
         axios.get('http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams')
             .then(({ data }) => {
-                // data.sports[0].leagues[0].teams.map(team => {
-                //     <Text>{team.displayName}</Text>
-                // })
+                // set list of teams to iterate through players
                 setTeams(data.sports[0].leagues[0].teams);
             });
     };
 
-    const fetchTeamRoster = async () => {
+    const fetchTeamRoster = () => {
         const congregatePlayers = [];
-        // teams.forEach(team => {
-        //     axios.get()
-        // })
-        
-        // test chicago bears
-        await axios.get('http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/chi/roster')
-            .then(({ data }) => {
-                console.log(data.athletes);
-                data.athletes.forEach(position => {
-                    position.items.forEach(player => {
-                        congregatePlayers.push(player);
+        teams.forEach(async ({ team }) => {
+            // iterate through teams list for their abbreviation and fetch roster
+            await axios.get(`http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${team.abbreviation}/roster`)
+                .then(({ data }) => {
+                    data.athletes.forEach(position => {
+                        position.items.forEach(player => {
+                            // push every player into a list
+                            congregatePlayers.push(player);
+                        });
                     });
                 });
-            });
+        });
         setAllPlayers(congregatePlayers);
     };
 
     const countColleges = () => {
         const colleges = [];
+        // edge-case where there are no players in the list
         if (allPlayers.length > 0) {
             allPlayers.forEach(player => {
-                const college = find(colleges, { name: player.college.name });
-                if (!college) {
-                    player.college.count = 1;
-                    colleges.push(player.college);
-                } else {
-                    college.count++;
+                // edge-case for players with no college data
+                if (player.college && player.college.name) {
+                    // find if player college exists in list of colleges
+                    // used college.name property as college.id's didn't repeat
+                    const college = find(colleges, { name: player.college.name });
+                    if (!college) {
+                        player.college.count = 1;
+                        colleges.push(player.college);
+                    } else {
+                        college.count++;
+                    }
                 }
             });
         }
+        // sort list of colleges by count (players attended)
         const sortedColleges = sortBy(colleges, college => college.count).reverse();
     };
 
