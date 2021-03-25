@@ -4,7 +4,7 @@ import { SafeAreaView, StyleSheet, Text, Button } from 'react-native';
 const Home = ({ navigation }) => {
     return (
         <SafeAreaView style={styles.container}>
-            <Text>Home Page</Text>
+            <Text>NFL Talent Scout</Text>
             <Button
                 title="Select Teams"
                 onPress={() => navigation.navigate("SelectTeams")}
