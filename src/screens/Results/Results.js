@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, Button, View, Image } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Image } from 'react-native';
 import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import axios from 'axios';
 
@@ -43,7 +43,7 @@ const Results = ({ navigation, route: { params } }) => {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.header}>The Top 5 Most Attended Colleges By The Selected NFL Teams Are:</Text>
+            <Text style={styles.header}>The Top 5 Most Attended Colleges By Your Selected NFL Teams Are:</Text>
             <View style={styles.scrollviewContainer}>
                 <ScrollView style={styles.scrollview}>
                     <View style={styles.fullWidth}>
@@ -99,10 +99,10 @@ const styles = StyleSheet.create({
         textAlign: 'center',
     },
     scrollviewContainer: {
-        height: 480
+        height: 520,
     },
     scrollview: {
-        width: '90%',
+        width: '100%',
     },
     fullWidth: {
         width: '100%',
@@ -114,7 +114,6 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     schoolImage: {
-        color: 'black',
         height: 100,
         width: 100,
         margin: 10,

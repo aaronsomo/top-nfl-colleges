@@ -221,7 +221,6 @@ const styles = StyleSheet.create({
         opacity: 1,
     },
     teamTile: {
-        color: 'black',
         height: 100,
         width: 100,
         margin: 10,
