@@ -27,16 +27,18 @@ const SelectTeams = ({ navigation }) => {
         let countA = 0;
 
         try {
-            teams.forEach(async ({ team }, i) => {
+            teams.forEach(async ({ team }) => {
                 let countB = 0;
                 // iterate through teams list for their abbreviation and fetch roster
                 await axios.get(`http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${team.abbreviation}/roster`)
                     .then(({ data }) => {
-                        data.athletes.forEach((position, j) => {
+                        data.athletes.forEach((position) => {
                             let countC = 0;
                             position.items.forEach(player => {
                                 // push every player into a list
                                 congregatePlayers.push(player);
+                                // execute cb when we've reached the end of the list
+                                // opted to do it this way to make sure every iteration is hit
                                 if (countA === teams.length - 1 && countB === data.athletes.length - 1 && countC === position.items.length - 1) {
                                     countColleges(congregatePlayers);
                                     setIsLoading(false);
@@ -74,7 +76,6 @@ const SelectTeams = ({ navigation }) => {
                 }
             });
         }
-
         const sorted = sortBy(colleges, college => college.count).reverse();
         setSortedColleges(sorted);
     };
@@ -109,6 +110,7 @@ const SelectTeams = ({ navigation }) => {
     };
 
     useEffect(() => {
+        // populate list of teams independent of selected teams
         fetchTeams();
     }, []);
 
@@ -116,7 +118,6 @@ const SelectTeams = ({ navigation }) => {
         if (selectedTeams.length > 0) {
             fetchTeamRoster(selectedTeams);
         }
-
     }, [selectedTeams]);
 
     return (

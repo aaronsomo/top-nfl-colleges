@@ -8,6 +8,8 @@ const Results = ({ navigation, route: { params } }) => {
     const topFive = sortedColleges.splice(0, 5);
     const [officialList, setOfficialList] = useState([]);
 
+    // multiple keys for test purposes, feel free to use; will deactivate after review
+    // google limits 100 searches per day
     const key1 = 'AIzaSyAwEJRZ3gG1E-PMP4_ffqAhDGB96NhVC2w';
     const key2 = 'AIzaSyCqVeAQpe-pdQB-jbszpVajTC5_7VxTUGw';
     const key3 = 'AIzaSyAQ-lcLS8ngOnv12w5B_ecJqEjEdHe1Gwo';
@@ -16,20 +18,28 @@ const Results = ({ navigation, route: { params } }) => {
     const fetchCollegeImg = async (colleges) => {
         let count = 0;
         colleges.forEach(async (college) => {
+            // replace whitespace in strings for search query
             const searchTerm = college && college.mascot ? (
                 college.mascot.replace(/\s/g, '+')
             ) : (
                 college.name.replace(/\s/g, '+')
             );
             try {
-                await axios.get(`https://www.googleapis.com/customsearch/v1?key=${key3}&cx=${cx}&searchType=image&q=${searchTerm}+college+logo`)
+                await axios.get(`https://www.googleapis.com/customsearch/v1?key=${key1}&cx=${cx}&searchType=image&q=${searchTerm}+college+logo`)
                     .then(({ data }) => {
-                        college.image = data.items[0].image.thumbnailLink ||
+                        // edge-case in which there are no image results, set default
+                        college.image = data.items && data.items[0].image && data.items[0].image.thumbnailLink ||
                             'https://i0.wp.com/athertoncpas.com/wp-content/uploads/2016/09/generic-uni-logo-1.png';
                         count++;
                     });
             } catch(error) {
-                console.log(error);
+                console.log(error.message);
+                // status code 429 = google API key query limit reached
+                // for purposes of the app, set image with dummy icon and display
+                if (error.message === "Request failed with status code 429") {
+                    college.image = 'https://i0.wp.com/athertoncpas.com/wp-content/uploads/2016/09/generic-uni-logo-1.png';
+                    count++;
+                }
             }
             if (count === colleges.length) {
                 setOfficialList(colleges);
