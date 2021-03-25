@@ -65,8 +65,7 @@ const SelectTeams = ({ navigation }) => {
                     // used college.name property as college.id's didn't repeat
                     const college = find(colleges, { name: player.college.name });
 
-                    // edge-case where there are no players in the list
-                    // sort list of colleges by count (players attended)
+                    // edge-case where there are no colleges in the list, add
                     if (!college) {
                         player.college.count = 1;
                         colleges.push(player.college);
@@ -76,14 +75,15 @@ const SelectTeams = ({ navigation }) => {
                 }
             });
         }
+        // sort list of colleges by count (players attended)
         const sorted = sortBy(colleges, college => college.count).reverse();
         setSortedColleges(sorted);
     };
 
     const handleSelect = (id) => {
         const tempArray = teams;
-        const selected = find(tempArray, ['team', {id: id}]);
-        if (!find(selectedTeams, ['team', {id: id}])) {
+        const selected = find(tempArray, ['team', { id }]);
+        if (!find(selectedTeams, ['team', { id }])) {
             selected.selected = true;
             setSelectedTeams([...selectedTeams, selected]);
         } else {
