@@ -9,14 +9,14 @@ const Results = ({ navigation, route: { params } }) => {
     const [officialList, setOfficialList] = useState([]);
 
     // multiple keys for test purposes, feel free to use; will deactivate after review
-    // google limits 100 searches per day
+    // google limits 100 searches per day per key
     const key1 = 'AIzaSyAwEJRZ3gG1E-PMP4_ffqAhDGB96NhVC2w';
     const key2 = 'AIzaSyCqVeAQpe-pdQB-jbszpVajTC5_7VxTUGw';
     const key3 = 'AIzaSyAQ-lcLS8ngOnv12w5B_ecJqEjEdHe1Gwo';
     const cx = '4288575b4c4c6a891';
 
     const fetchCollegeImg = async (colleges) => {
-        let count = 0;
+        let collegeCount = 0;
         colleges.forEach(async (college) => {
             // replace whitespace in strings for search query
             const searchTerm = college && college.mascot ? (
@@ -30,7 +30,7 @@ const Results = ({ navigation, route: { params } }) => {
                         // edge-case in which there are no image results, set default
                         college.image = data.items && data.items[0].image && data.items[0].image.thumbnailLink ||
                             'https://i0.wp.com/athertoncpas.com/wp-content/uploads/2016/09/generic-uni-logo-1.png';
-                        count++;
+                        collegeCount++;
                     });
             } catch(error) {
                 console.log(error.message);
@@ -38,10 +38,10 @@ const Results = ({ navigation, route: { params } }) => {
                 // for purposes of the app, set image with dummy icon and display
                 if (error.message === "Request failed with status code 429") {
                     college.image = 'https://i0.wp.com/athertoncpas.com/wp-content/uploads/2016/09/generic-uni-logo-1.png';
-                    count++;
+                    collegeCount++;
                 }
             }
-            if (count === colleges.length) {
+            if (collegeCount === colleges.length) {
                 setOfficialList(colleges);
             }
         });

@@ -24,31 +24,31 @@ const SelectTeams = ({ navigation }) => {
         const congregatePlayers = [];
 
         // counters are used to make sure we only aggregate college data after fetching
-        let countA = 0;
+        let teamCount = 0;
 
         try {
             teams.forEach(async ({ team }) => {
-                let countB = 0;
+                let positionCount = 0;
                 // iterate through teams list for their abbreviation and fetch roster
                 await axios.get(`http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${team.abbreviation}/roster`)
                     .then(({ data }) => {
                         data.athletes.forEach((position) => {
-                            let countC = 0;
+                            let playerCount = 0;
                             position.items.forEach(player => {
                                 // push every player into a list
                                 congregatePlayers.push(player);
                                 // execute cb when we've reached the end of the list
                                 // opted to do it this way to make sure every iteration is hit
-                                if (countA === teams.length - 1 && countB === data.athletes.length - 1 && countC === position.items.length - 1) {
+                                if (teamCount === teams.length - 1 && positionCount === data.athletes.length - 1 && playerCount === position.items.length - 1) {
                                     countColleges(congregatePlayers);
                                     setIsLoading(false);
                                 }
-                                countC++;
+                                playerCount++;
                             });
-                            countB++;
+                            positionCount++;
                         });
                     });
-                countA++;
+                teamCount++;
             });
         } catch(error) {
             console.log(error);
