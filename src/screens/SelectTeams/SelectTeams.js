@@ -8,36 +8,52 @@ const SelectTeams = ({ navigation }) => {
     const [teams, setTeams] = useState([]);
     const [allPlayers, setAllPlayers] = useState([]);
     const [sortedColleges, setSortedColleges] = useState([]);
+    const [isLoading, setIsLoading] = useState(false);
 
-    const fetchTeams = () => {
+    const fetchTeams = async () => {
         // fetch a list of teams
-        axios.get('http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams')
-            .then(({ data }) => {
-                // set list of teams to iterate through players
-                setTeams(data.sports[0].leagues[0].teams);
-            });
+        const { data } = await axios.get('http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams');
+        setTeams(data.sports[0].leagues[0].teams);
+        return(data.sports[0].leagues[0].teams);
     };
 
-    const fetchTeamRoster = () => {
+    const fetchTeamRoster = async (teams) => {
         const congregatePlayers = [];
-        teams.forEach(async ({ team }) => {
-            // iterate through teams list for their abbreviation and fetch roster
-            await axios.get(`http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${team.abbreviation}/roster`)
-                .then(({ data }) => {
-                    data.athletes.forEach(position => {
-                        position.items.forEach(player => {
-                            // push every player into a list
-                            congregatePlayers.push(player);
+        setIsLoading(true);
+
+        // counters are used to make sure we only aggregate college data after fetching
+        let countA = 0;
+
+        try {
+            teams.forEach(async ({ team }, i) => {
+                let countB = 0;
+                // iterate through teams list for their abbreviation and fetch roster
+                await axios.get(`http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${team.abbreviation}/roster`)
+                    .then(({ data }) => {
+                        data.athletes.forEach((position, j) => {
+                            let countC = 0;
+                            position.items.forEach(player => {
+                                // push every player into a list
+                                congregatePlayers.push(player);
+                                if (countA === teams.length - 1 && countB === data.athletes.length - 1 && countC === position.items.length - 1) {
+                                    countColleges(congregatePlayers);
+                                }
+                                countC++;
+                            });
+                            countB++;
                         });
                     });
-                });
-        });
+                countA++;
+            });
+        } catch(error) {
+            console.log(error);
+        }
         setAllPlayers(congregatePlayers);
+        setIsLoading(false);
     };
 
-    const countColleges = () => {
+    const countColleges = (allPlayers) => {
         const colleges = [];
-        // edge-case where there are no players in the list
         if (allPlayers.length > 0) {
             allPlayers.forEach(player => {
                 // edge-case for players with no college data
@@ -45,6 +61,9 @@ const SelectTeams = ({ navigation }) => {
                     // find if player college exists in list of colleges
                     // used college.name property as college.id's didn't repeat
                     const college = find(colleges, { name: player.college.name });
+
+                    // edge-case where there are no players in the list
+                    // sort list of colleges by count (players attended)
                     if (!college) {
                         player.college.count = 1;
                         colleges.push(player.college);
@@ -54,13 +73,18 @@ const SelectTeams = ({ navigation }) => {
                 }
             });
         }
-        // sort list of colleges by count (players attended)
+
         const sorted = sortBy(colleges, college => college.count).reverse();
         setSortedColleges(sorted);
     };
 
     useEffect(() => {
-        fetchTeams();
+        const multiFetch = async () => {
+            const teams = await fetchTeams();
+            await fetchTeamRoster(teams);
+        };
+
+        multiFetch();
     }, []);
 
     return (
@@ -87,18 +111,12 @@ const SelectTeams = ({ navigation }) => {
                 </ScrollView>
             </View>
             <Button
-                title="Get Bears Roster"
-                onPress={() => fetchTeamRoster()}
-            />
-            <Button
-                title="Get Bears Colleges"
-                onPress={() => countColleges()}
-            />
-            <Button
                 title="Results"
-                onPress={() => navigation.navigate("Results", {
-                    sortedColleges,
-                })}
+                onPress={() => {
+                    navigation.navigate("Results", {
+                        sortedColleges,
+                    })
+                }}
             />
         </SafeAreaView>
     )
