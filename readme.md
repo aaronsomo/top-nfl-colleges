@@ -14,11 +14,11 @@ from the app root application directory, cd into the `/ios` directory and run `n
 
 #### To run application:
 
-Run `npm start web` in one console and leave it running.
-A browser tab should launch with the Metro bundler service.
-Navigate to the Metro bundler browser tab.
-Click `Run on iPhone simulator` to run on iOS.
-Click `Run on Android device/emulator` to run on Android.
+Run `npm start web` in one console and leave it running.  
+A browser tab should launch with the Metro bundler service.  
+Navigate to the Metro bundler browser tab.  
+Click `Run on iPhone simulator` to run on iOS.  
+Click `Run on Android device/emulator` to run on Android.  
 
 -OR OPTIONALLY-
 
