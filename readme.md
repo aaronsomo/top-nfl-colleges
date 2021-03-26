@@ -9,8 +9,8 @@ Please follow these steps to install and start the application:
 
 #### To Install node-modules and pod files:
 
-cd into app root directory and run `npm install`. 
-from the app root application directory, cd into the `/ios` directory and run `npm pod install`. 
+cd into app root directory and run `npm install`.  
+from the app root application directory, cd into the `/ios` directory and run `npm pod install`.  
 
 #### To run application:
 
