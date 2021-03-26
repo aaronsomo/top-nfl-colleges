@@ -9,8 +9,8 @@ Please follow these steps to install and start the application:
 
 #### To Install node-modules and pod files:
 
-cd into app root directory and run `npm install`
-from the app root application directory, cd into the `/ios` directory and run `npm pod install`
+cd into app root directory and run `npm install`. 
+from the app root application directory, cd into the `/ios` directory and run `npm pod install`. 
 
 #### To run application:
 
@@ -22,9 +22,9 @@ Click `Run on Android device/emulator` to run on Android.
 
 -OR OPTIONALLY-
 
-From the app root directory...
-Run `npm start web` in one console and leave it running.
-Run `npm run ios` or `npm run android` to run them in their native simulators/emulators.
+From the app root directory...  
+Run `npm start web` in one console and leave it running.  
+Run `npm run ios` or `npm run android` to run them in their native simulators/emulators.  
 
 #### To run tests:
 
