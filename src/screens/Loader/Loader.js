@@ -5,8 +5,8 @@ const Loader = ({ visible }) => {
     if (visible) {
         return (
             <View style={styles.background}>
-                <View style={styles.imageSize}>
-                    <Image source={require('../../assets/lightning200.gif')} />
+                <View>
+                    <Image style={styles.image} source={require('../../assets/lightning200.gif')} />
                 </View>
             </View>
         )
@@ -27,6 +27,9 @@ const styles = StyleSheet.create ({
         alignItems: 'center',
         justifyContent: 'center',
     },
+    image: {
+        transform: [{rotate: '-45deg'}],
+    }
 });
 
 export default Loader;

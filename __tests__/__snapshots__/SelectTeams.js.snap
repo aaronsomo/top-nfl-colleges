@@ -1,0 +1,195 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<SelectTeams /> should match snapshot 1`] = `
+<RCTSafeAreaView
+  emulateUnlessSupported={true}
+  style={
+    Object {
+      "alignItems": "center",
+      "backgroundColor": "#595faa",
+      "flex": 1,
+      "justifyContent": "center",
+    }
+  }
+>
+  <Text
+    style={
+      Object {
+        "color": "#fff",
+        "fontSize": 30,
+        "fontWeight": "600",
+        "height": 60,
+        "textAlign": "center",
+        "width": 200,
+      }
+    }
+  >
+    Select Teams
+  </Text>
+  <View
+    style={
+      Object {
+        "height": 480,
+      }
+    }
+  >
+    <RCTScrollView
+      collapsable={false}
+      onGestureHandlerEvent={[Function]}
+      onGestureHandlerStateChange={[Function]}
+      style={
+        Object {
+          "display": "flex",
+          "width": "100%",
+        }
+      }
+    >
+      <View>
+        <View
+          style={
+            Object {
+              "display": "flex",
+              "flexDirection": "row",
+              "flexWrap": "wrap",
+              "justifyContent": "center",
+            }
+          }
+        />
+      </View>
+    </RCTScrollView>
+  </View>
+  <View
+    style={
+      Object {
+        "display": "flex",
+        "flexDirection": "row",
+        "justifyContent": "space-between",
+        "width": "70%",
+      }
+    }
+  >
+    <RNGestureHandlerButton
+      collapsable={false}
+      onGestureEvent={[Function]}
+      onGestureHandlerEvent={[Function]}
+      onGestureHandlerStateChange={[Function]}
+      onHandlerStateChange={[Function]}
+      rippleColor={0}
+    >
+      <View
+        accessible={true}
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#3898EC",
+            "borderRadius": 10,
+            "height": 40,
+            "justifyContent": "center",
+            "margin": 10,
+            "opacity": 1,
+            "width": 120,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#fff",
+              "fontSize": 18,
+              "fontWeight": "500",
+            }
+          }
+        >
+          Unselect All
+        </Text>
+      </View>
+    </RNGestureHandlerButton>
+    <RNGestureHandlerButton
+      collapsable={false}
+      onGestureEvent={[Function]}
+      onGestureHandlerEvent={[Function]}
+      onGestureHandlerStateChange={[Function]}
+      onHandlerStateChange={[Function]}
+      rippleColor={0}
+    >
+      <View
+        accessible={true}
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#3898EC",
+            "borderRadius": 10,
+            "height": 40,
+            "justifyContent": "center",
+            "margin": 10,
+            "opacity": 1,
+            "width": 120,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#fff",
+              "fontSize": 18,
+              "fontWeight": "500",
+            }
+          }
+        >
+          Select All
+        </Text>
+      </View>
+    </RNGestureHandlerButton>
+  </View>
+  <View
+    style={
+      Object {
+        "alignItems": "center",
+        "backgroundColor": "#3898EC",
+        "borderRadius": 10,
+        "height": 60,
+        "justifyContent": "center",
+        "margin": 15,
+        "width": 120,
+      }
+    }
+  >
+    <RNGestureHandlerButton
+      collapsable={false}
+      onGestureEvent={[Function]}
+      onGestureHandlerEvent={[Function]}
+      onGestureHandlerStateChange={[Function]}
+      onHandlerStateChange={[Function]}
+      rippleColor={0}
+    >
+      <View
+        accessible={true}
+        style={
+          Object {
+            "alignItems": "center",
+            "backgroundColor": "#d3d3d3",
+            "borderRadius": 10,
+            "height": 60,
+            "justifyContent": "center",
+            "margin": 15,
+            "opacity": 1,
+            "width": 120,
+          }
+        }
+      >
+        <Text
+          style={
+            Object {
+              "color": "#fff",
+              "fontSize": 18,
+              "fontWeight": "500",
+            }
+          }
+        >
+          Scout &gt;&gt;
+        </Text>
+      </View>
+    </RNGestureHandlerButton>
+  </View>
+</RCTSafeAreaView>
+`;

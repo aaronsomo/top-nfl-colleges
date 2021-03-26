@@ -17,36 +17,35 @@ const SelectTeams = ({ navigation }) => {
         const array = data.sports[0].leagues[0].teams;
         array.forEach(item => item.selected = false);
         setTeams(array);
-        return(array);
     };
 
     const fetchTeamRoster = async (teams) => {
         const congregatePlayers = [];
 
         // counters are used to make sure we only aggregate college data after fetching
-        let countA = 0;
+        let teamCount = 0;
 
         try {
-            teams.forEach(async ({ team }, i) => {
-                let countB = 0;
+            teams.forEach(async ({ team }) => {
+                let positionCount = 0;
                 // iterate through teams list for their abbreviation and fetch roster
-                await axios.get(`http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${team.abbreviation}/roster`)
-                    .then(({ data }) => {
-                        data.athletes.forEach((position, j) => {
-                            let countC = 0;
-                            position.items.forEach(player => {
-                                // push every player into a list
-                                congregatePlayers.push(player);
-                                if (countA === teams.length - 1 && countB === data.athletes.length - 1 && countC === position.items.length - 1) {
-                                    countColleges(congregatePlayers);
-                                    setIsLoading(false);
-                                }
-                                countC++;
-                            });
-                            countB++;
-                        });
+                const { data } = await axios.get(`http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${team.abbreviation}/roster`);
+                data.athletes.forEach((position) => {
+                    let playerCount = 0;
+                    position.items.forEach(player => {
+                        // push every player into a list
+                        congregatePlayers.push(player);
+                        // execute cb when we've reached the end of the list
+                        // opted to do it this way to make sure every iteration is hit
+                        if (teamCount === teams.length - 1 && positionCount === data.athletes.length - 1 && playerCount === position.items.length - 1) {
+                            countColleges(congregatePlayers);
+                            setIsLoading(false);
+                        }
+                        playerCount++;
                     });
-                countA++;
+                    positionCount++;
+                });
+                teamCount++;
             });
         } catch(error) {
             console.log(error);
@@ -63,8 +62,7 @@ const SelectTeams = ({ navigation }) => {
                     // used college.name property as college.id's didn't repeat
                     const college = find(colleges, { name: player.college.name });
 
-                    // edge-case where there are no players in the list
-                    // sort list of colleges by count (players attended)
+                    // edge-case where there are no colleges in the list, add
                     if (!college) {
                         player.college.count = 1;
                         colleges.push(player.college);
@@ -74,15 +72,15 @@ const SelectTeams = ({ navigation }) => {
                 }
             });
         }
-
+        // sort list of colleges by count (players attended)
         const sorted = sortBy(colleges, college => college.count).reverse();
         setSortedColleges(sorted);
     };
 
     const handleSelect = (id) => {
         const tempArray = teams;
-        const selected = find(tempArray, ['team', {id: id}]);
-        if (!find(selectedTeams, ['team', {id: id}])) {
+        const selected = find(tempArray, ['team', { id }]);
+        if (!find(selectedTeams, ['team', { id }])) {
             selected.selected = true;
             setSelectedTeams([...selectedTeams, selected]);
         } else {
@@ -109,6 +107,7 @@ const SelectTeams = ({ navigation }) => {
     };
 
     useEffect(() => {
+        // populate list of teams independent of selected teams
         fetchTeams();
     }, []);
 
@@ -116,7 +115,6 @@ const SelectTeams = ({ navigation }) => {
         if (selectedTeams.length > 0) {
             fetchTeamRoster(selectedTeams);
         }
-
     }, [selectedTeams]);
 
     return (
@@ -177,7 +175,6 @@ const SelectTeams = ({ navigation }) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: '#595faa',
@@ -222,7 +219,6 @@ const styles = StyleSheet.create({
         opacity: 1,
     },
     teamTile: {
-        color: 'black',
         height: 100,
         width: 100,
         margin: 10,
