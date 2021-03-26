@@ -33,7 +33,7 @@ Run `npm test`
 #### Optional:
 This was a great exercise. Looking forward to any and all questions, comments, concerns, feedback, constructive criticisms, etc.
 
-Thank you!
+Thank you!  
 Aaron Southammavong
 
 #### Running on Node v10.16.3
