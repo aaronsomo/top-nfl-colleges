@@ -17,7 +17,6 @@ const SelectTeams = ({ navigation }) => {
         const array = data.sports[0].leagues[0].teams;
         array.forEach(item => item.selected = false);
         setTeams(array);
-        return(array);
     };
 
     const fetchTeamRoster = async (teams) => {
@@ -30,24 +29,22 @@ const SelectTeams = ({ navigation }) => {
             teams.forEach(async ({ team }) => {
                 let positionCount = 0;
                 // iterate through teams list for their abbreviation and fetch roster
-                await axios.get(`http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${team.abbreviation}/roster`)
-                    .then(({ data }) => {
-                        data.athletes.forEach((position) => {
-                            let playerCount = 0;
-                            position.items.forEach(player => {
-                                // push every player into a list
-                                congregatePlayers.push(player);
-                                // execute cb when we've reached the end of the list
-                                // opted to do it this way to make sure every iteration is hit
-                                if (teamCount === teams.length - 1 && positionCount === data.athletes.length - 1 && playerCount === position.items.length - 1) {
-                                    countColleges(congregatePlayers);
-                                    setIsLoading(false);
-                                }
-                                playerCount++;
-                            });
-                            positionCount++;
-                        });
+                const { data } = await axios.get(`http://site.api.espn.com/apis/site/v2/sports/football/nfl/teams/${team.abbreviation}/roster`);
+                data.athletes.forEach((position) => {
+                    let playerCount = 0;
+                    position.items.forEach(player => {
+                        // push every player into a list
+                        congregatePlayers.push(player);
+                        // execute cb when we've reached the end of the list
+                        // opted to do it this way to make sure every iteration is hit
+                        if (teamCount === teams.length - 1 && positionCount === data.athletes.length - 1 && playerCount === position.items.length - 1) {
+                            countColleges(congregatePlayers);
+                            setIsLoading(false);
+                        }
+                        playerCount++;
                     });
+                    positionCount++;
+                });
                 teamCount++;
             });
         } catch(error) {

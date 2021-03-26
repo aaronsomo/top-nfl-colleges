@@ -25,13 +25,11 @@ const Results = ({ navigation, route: { params } }) => {
                 college.name.replace(/\s/g, '+')
             );
             try {
-                await axios.get(`https://www.googleapis.com/customsearch/v1?key=${key1}&cx=${cx}&searchType=image&q=${searchTerm}+college+logo`)
-                    .then(({ data }) => {
-                        // edge-case in which there are no image results, set default
-                        college.image = data.items && data.items[0].image && data.items[0].image.thumbnailLink ||
-                            'https://i0.wp.com/athertoncpas.com/wp-content/uploads/2016/09/generic-uni-logo-1.png';
-                        collegeCount++;
-                    });
+                const { data } = await axios.get(`https://www.googleapis.com/customsearch/v1?key=${key1}&cx=${cx}&searchType=image&q=${searchTerm}+college+logo`);
+                // edge-case in which there are no image results, set default
+                college.image = data.items && data.items[0].image && data.items[0].image.thumbnailLink ||
+                    'https://i0.wp.com/athertoncpas.com/wp-content/uploads/2016/09/generic-uni-logo-1.png';
+                collegeCount++;
             } catch(error) {
                 console.log(error.message);
                 // status code 429 = google API key query limit reached
